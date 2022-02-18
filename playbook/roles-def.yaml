@@ -1,0 +1,36 @@
+---
+# Make sure you've already ran init-playbook and httpd-playbook before running this playbook.
+- name: GALE Box Apps Installation Playbook.
+  hosts: target
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: Assert whether the required variables are present
+      fail:
+        msg: "[ERROR] Hostname and Domain are not defined in the inventory file"
+      when: "item is not defined"
+      with_items:
+        - __HOSTNAME__
+        - __DOMAIN__
+
+  roles:
+    # Run these roles in this specific order, comment out if not needed. DO NOT! MESS WITH THE ORDER
+    - common
+    - httpd
+    - SAR_reports
+    - fluentd
+    - alert-manager
+    - core-services-check
+    - rabbitmq
+    - mongo
+    - grafana
+    - kibana
+    - elasticsearch
+    - gale-cadvisor
+    - prometheus
+    - zipkin
+    - gale-apps
+    - backupServerConfig
+    - RHEL7-CIS
+    - firewalld
