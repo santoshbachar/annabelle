@@ -1,5 +1,10 @@
 package tasks
 
+import (
+	"fmt"
+	"gopkg.in/yaml.v2"
+)
+
 type File struct {
 	Path  string `yaml:"path"`
 	State string `yaml:"state"`
@@ -10,6 +15,13 @@ type File struct {
 	Mode    string `yaml:"mode"`
 }
 
-func HandleFile(x interface{}) {
+func HandleFile(file []byte) {
 	//file := File{x}
+	fmt.Println("HandleFile*********")
+	fs := File{}
+	err := yaml.Unmarshal([]byte(file), &fs)
+	if err != nil {
+		fmt.Println("err while Unmarshall")
+	}
+	fmt.Println(fs)
 }

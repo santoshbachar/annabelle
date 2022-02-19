@@ -70,6 +70,11 @@ func LoadTasks(name string) {
 					fmt.Println("tags found")
 				default:
 					if k == "file" {
+						u, err := yaml.Marshal(v)
+						if err != nil {
+							fmt.Println("err while Marshal")
+						}
+						HandleFile(u)
 						fi := v.(map[interface{}]interface{})
 						f := File{}
 						if name, o := fi["group"].(string); o {
