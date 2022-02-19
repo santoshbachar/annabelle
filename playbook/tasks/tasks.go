@@ -8,11 +8,11 @@ import (
 	"reflect"
 )
 
-type TaskType string
+//type TaskType string
 
 const (
-	FILE        TaskType = "file"
-	SYNCHRONIZE          = "synchronize"
+	FILE        = "file"
+	SYNCHRONIZE = "synchronize"
 )
 
 type Task struct {
@@ -43,16 +43,6 @@ func LoadTasks(name string) {
 		panic(err)
 	}
 
-	//fmt.Println("entire task", tasks[0])
-	//fmt.Println("task Kind: ", tasks[0].Kind)
-	//fmt.Println("task file: ", tasks[0].File)
-
-	//fmt.Println("task name: ", tasks[0].Name)
-	//fmt.Println("task tags: ", tasks[0].Tags)
-	//fmt.Println("task loop: ", tasks[0].Loop)
-
-	//fmt.Println("try: ", Keys(tasks[0].Kind))
-
 	fmt.Println("len", len(tasks[0].Kind))
 	fmt.Println("len of kind maps", len(tasks[0].Kind[0]))
 
@@ -69,12 +59,13 @@ func LoadTasks(name string) {
 				case "tags":
 					fmt.Println("tags found")
 				default:
-					if k == "file" {
+					if k == FILE {
 						u, err := yaml.Marshal(v)
 						if err != nil {
 							fmt.Println("err while Marshal")
 						}
 						HandleFile(u)
+
 						fi := v.(map[interface{}]interface{})
 						f := File{}
 						if name, o := fi["group"].(string); o {
@@ -87,6 +78,12 @@ func LoadTasks(name string) {
 						} else {
 							fmt.Println("printing file", file)
 						}
+					} else if k == SYNCHRONIZE {
+						u, err := yaml.Marshal(v)
+						if err != nil {
+							fmt.Println("err while Marshal")
+						}
+						HandleSynchronize(u)
 					}
 
 					fmt.Println("======================================")
