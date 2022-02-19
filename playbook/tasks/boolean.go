@@ -1,8 +1,8 @@
 package tasks
 
-type Boolean int
+type Boolean string
 
-const(
-	YES Boolean = iota
-	NO
+const (
+	YES Boolean = "yes"
+	NO  Boolean = "no"
 )

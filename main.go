@@ -1,7 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"github.com/santoshbachar/annabelle/playbook"
+)
 
 func main() {
-	fmt.Println("hello")
+	//fmt.Println("hello")
+	playbook.LoadPlaybook()
 }

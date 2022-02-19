@@ -1,0 +1,14 @@
+---
+
+- name: Create the scripts directory
+  file:
+    path: /var/gale/nope/scripts
+    state: directory
+    recurse: yes
+    owner: root
+    group: root
+    mode: '777'
+  loop:
+    - something
+  tags:
+    - create-directory
