@@ -16,7 +16,8 @@ const (
 )
 
 type HandleTask interface {
-	Unmarshal(file []byte) (bool, error)
+	Unmarshal(raw []byte)
+	Execute() bool
 }
 
 type Task struct {
@@ -47,8 +48,8 @@ func LoadTasks(name string) {
 		panic(err)
 	}
 
-	fmt.Println("len", len(tasks[0].Kind))
-	fmt.Println("len of kind maps", len(tasks[0].Kind[0]))
+	//fmt.Println("len", len(tasks[0].Kind))
+	//fmt.Println("len of kind maps", len(tasks[0].Kind[0]))
 
 	for _, task := range tasks {
 		for _, kind := range task.Kind {
@@ -62,53 +63,17 @@ func LoadTasks(name string) {
 					fmt.Println("loop found")
 				case "tags":
 					fmt.Println("tags found")
-				default:
-					if k == FILE {
-						u, err := yaml.Marshal(v)
-						if err != nil {
-							fmt.Println("err while Marshal")
-						}
-						f := File{}
-						ok, err := f.Unmarshal(u)
-						if ok {
-							fmt.Println("Interface function works")
-						}
-						//fok, err := File{}.Unmarshal(u)
-
-						//HandleFile(u)
-
-						//fi := v.(map[interface{}]interface{})
-						//f := File{}
-						//if name, o := fi["group"].(string); o {
-						//	f.Group = name
-						//}
-						//fmt.Println("group", name)
-
-						file, ok := v.(File)
-						if !ok {
-							fmt.Println("not ok")
-						} else {
-							fmt.Println("printing file", file)
-						}
-					} else if k == SYNCHRONIZE {
-						u, err := yaml.Marshal(v)
-						if err != nil {
-							fmt.Println("err while Marshal")
-						}
-						HandleSynchronize(u)
+				case FILE, SYNCHRONIZE:
+					raw, err := yaml.Marshal(v)
+					if err != nil {
+						fmt.Println("err while Marshal")
 					}
-
+					handleTasks(k, raw)
+				default:
 					fmt.Println("======================================")
-					typeofstruct(v)
-					teststruct(v)
 					fmt.Println("v=", v)
 					fmt.Println("v= type is", reflect.TypeOf(v))
-
 					switch v.(type) {
-					case string:
-						fmt.Println("String found")
-					case []string:
-						fmt.Println("array of string")
 					case File:
 						fmt.Println("file")
 					case []File:
@@ -123,25 +88,20 @@ func LoadTasks(name string) {
 					fmt.Println("======================================")
 				}
 			}
+			fmt.Println("**********Attention************")
+			fmt.Println("One task is done")
+			fmt.Println("**********Attention************")
 		}
 	}
 }
 
-func typeofstruct(x interface{}) {
-	m := make(map[string]string)
-	m["a"] = "b"
-	fmt.Println(reflect.TypeOf(m))
-	fmt.Println("typeofstruct() -> ",
-		reflect.ValueOf(x).Kind())
-	fmt.Println("typeofstruct() -> ",
-		reflect.TypeOf(x))
-}
-
-func teststruct(x interface{}) {
-	fmt.Println("teststruct func()======")
-	switch x.(type) {
-	case File:
-		fmt.Println("I am file ")
-
+func handleTasks(task string, raw []byte) {
+	switch task {
+	case FILE:
+		File{}.Unmarshal(raw)
+	case SYNCHRONIZE:
+		Synchronize{}.Unmarshal(raw)
+	default:
+		fmt.Println("Are you lost sweetheart?")
 	}
 }

@@ -1,7 +1,6 @@
 package tasks
 
 import (
-	"fmt"
 	"gopkg.in/yaml.v2"
 )
 
@@ -12,13 +11,20 @@ type Synchronize struct {
 	RSyncOpts   []string `yaml:"rsync_opts"`
 }
 
-func HandleSynchronize(file []byte) {
-	//file := File{x}
-	fmt.Println("HandleFile*********")
-	s := Synchronize{}
+func (s Synchronize) Unmarshal(file []byte) {
 	err := yaml.Unmarshal([]byte(file), &s)
 	if err != nil {
-		fmt.Println("err while Unmarshall")
+		panic(err)
 	}
-	fmt.Println(s)
 }
+
+//func HandleSynchronize(file []byte) {
+//	//file := File{x}
+//	fmt.Println("HandleFile*********")
+//	s := Synchronize{}
+//	err := yaml.Unmarshal([]byte(file), &s)
+//	if err != nil {
+//		fmt.Println("err while Unmarshall")
+//	}
+//	fmt.Println(s)
+//}

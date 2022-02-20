@@ -1,6 +1,7 @@
 package tasks
 
 import (
+	"fmt"
 	"gopkg.in/yaml.v2"
 )
 
@@ -14,12 +15,25 @@ type File struct {
 	Mode    string `yaml:"mode"`
 }
 
-func (f File) Unmarshal(file []byte) (bool, error) {
+func (f File) Unmarshal(file []byte) {
 	err := yaml.Unmarshal([]byte(file), &f)
 	if err != nil {
-		return false, err
+		panic(err)
 	}
-	return true, nil
+}
+
+func (f File) Execute() bool {
+	if f.Path == "" {
+		fmt.Println("Where to act?")
+		return false
+	}
+
+	if f.State == "" {
+		fmt.Println("State absent")
+		return false
+	}
+
+	return true
 }
 
 //func HandleFile(file []byte) {
