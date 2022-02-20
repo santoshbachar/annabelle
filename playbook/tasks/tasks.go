@@ -15,6 +15,10 @@ const (
 	SYNCHRONIZE = "synchronize"
 )
 
+type HandleTask interface {
+	Unmarshal(file []byte) (bool, error)
+}
+
 type Task struct {
 	Name string                   `yaml:"name"`
 	Loop []string                 `yaml:"loop"`
@@ -64,14 +68,22 @@ func LoadTasks(name string) {
 						if err != nil {
 							fmt.Println("err while Marshal")
 						}
-						HandleFile(u)
-
-						fi := v.(map[interface{}]interface{})
 						f := File{}
-						if name, o := fi["group"].(string); o {
-							f.Group = name
+						ok, err := f.Unmarshal(u)
+						if ok {
+							fmt.Println("Interface function works")
 						}
-						fmt.Println("group", name)
+						//fok, err := File{}.Unmarshal(u)
+
+						//HandleFile(u)
+
+						//fi := v.(map[interface{}]interface{})
+						//f := File{}
+						//if name, o := fi["group"].(string); o {
+						//	f.Group = name
+						//}
+						//fmt.Println("group", name)
+
 						file, ok := v.(File)
 						if !ok {
 							fmt.Println("not ok")
@@ -89,7 +101,9 @@ func LoadTasks(name string) {
 					fmt.Println("======================================")
 					typeofstruct(v)
 					teststruct(v)
-					fmt.Println(v)
+					fmt.Println("v=", v)
+					fmt.Println("v= type is", reflect.TypeOf(v))
+
 					switch v.(type) {
 					case string:
 						fmt.Println("String found")

@@ -1,7 +1,6 @@
 package tasks
 
 import (
-	"fmt"
 	"gopkg.in/yaml.v2"
 )
 
@@ -15,13 +14,21 @@ type File struct {
 	Mode    string `yaml:"mode"`
 }
 
-func HandleFile(file []byte) {
-	//file := File{x}
-	fmt.Println("HandleFile*********")
-	fs := File{}
-	err := yaml.Unmarshal([]byte(file), &fs)
+func (f File) Unmarshal(file []byte) (bool, error) {
+	err := yaml.Unmarshal([]byte(file), &f)
 	if err != nil {
-		fmt.Println("err while Unmarshall")
+		return false, err
 	}
-	fmt.Println(fs)
+	return true, nil
 }
+
+//func HandleFile(file []byte) {
+//	//file := File{x}
+//	fmt.Println("HandleFile*********")
+//	fs := File{}
+//	err := yaml.Unmarshal([]byte(file), &fs)
+//	if err != nil {
+//		fmt.Println("err while Unmarshall")
+//	}
+//	fmt.Println(fs)
+//}
