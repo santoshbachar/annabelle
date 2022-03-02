@@ -1,0 +1,29 @@
+---
+
+- name: Create the scripts directory
+  file:
+    path: /var/gale/nope/scripts
+    state: directory
+    recurse: yes
+    owner: root
+    group: root
+    mode: '777'
+  loop:
+    - something
+  tags:
+    - create-directory
+
+- name: synchronize script files
+  synchronize:
+    src: "{{ item }}"
+    dest: /var/gale/common/scripts/{{ item }}
+    delete: yes
+    rsync_opts:
+      - "--chmod=F544"
+  loop:
+    - script1.sh
+    - script2.sh
+    - script3.sh
+    - dakiya.sh
+  tags:
+    - sync-common-script-files
