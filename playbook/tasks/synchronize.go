@@ -20,7 +20,7 @@ func (s *Synchronize) Unmarshal(file []byte) {
 	}
 }
 
-func (s Synchronize) Execute() bool {
+func (s Synchronize) Execute(loop Loop) bool {
 	if s.Source == "" {
 		fmt.Println("From where?")
 		return false
@@ -31,20 +31,23 @@ func (s Synchronize) Execute() bool {
 		return false
 	}
 
-	syncfiles(&s.Source, &s.Destination)
+	syncfiles(&s.Source, &s.Destination, loop.items)
 
 	return true
 }
 
-func syncfiles(source *string, destination *string) {
+func syncfiles(source *string, destination *string, values []string) {
 	ok, variable := helper.FindVariable(*destination)
 	if ok == false {
 		return
 	}
-	var values = []string{"val1", "val2"}
 
 	ok, newVals := helper.FindVariableAndReplaceWithValue(destination, &variable, values)
-	fmt.Println(newVals)
+	if ok == false {
+		fmt.Println("Something wrong with variable parsing")
+		return
+	}
+	fmt.Println("newVals", newVals)
 }
 
 //func (s Synchronize) AddLoopItems(items interface{}) {

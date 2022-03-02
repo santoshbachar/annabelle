@@ -30,7 +30,7 @@ func (f *File) Unmarshal(file []byte) {
 	}
 }
 
-func (f File) Execute() bool {
+func (f File) Execute(loop Loop) bool {
 	fmt.Println("file execute()")
 	if f.Path == "" {
 		fmt.Println("Where to act?")

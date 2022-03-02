@@ -20,7 +20,7 @@ const (
 
 type HandleTask interface {
 	Unmarshal(raw []byte)
-	Execute() bool
+	Execute(loop Loop) bool
 	//AddLoopItems(items interface{})
 }
 
@@ -59,16 +59,15 @@ func LoadTasks(name string) {
 	var handle HandleTask
 	for _, task := range tasks {
 		for _, kind := range task.Kind {
+			loop := Loop{}
 			for k, v := range kind {
 				//fmt.Println("value =>", v)
-
 				switch k {
 				case NAME:
 					fmt.Println("name value =>", v)
 				case LOOP:
 					fmt.Println("loop value =>", v)
 					//handle.AddLoopItems(v)
-					loop := Loop{}
 					loop.UnmarshallLoopItems(v)
 				case TAGS:
 					fmt.Println("tags found")
@@ -90,7 +89,7 @@ func LoadTasks(name string) {
 			fmt.Println("**********Attention************")
 			//for i := 0
 			//i < len(loo))
-			handle.Execute()
+			handle.Execute(loop)
 			wg.Done()
 		}
 	}

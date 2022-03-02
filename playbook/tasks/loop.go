@@ -12,7 +12,7 @@ type Loop struct {
 
 //var items []string
 
-func (l Loop) UnmarshallLoopItems(items interface{}) {
+func (l *Loop) UnmarshallLoopItems(items interface{}) {
 	raw, err := yaml.Marshal(items)
 	if err != nil {
 		fmt.Println("err while Marshal")
