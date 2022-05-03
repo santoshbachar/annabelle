@@ -16,6 +16,7 @@ const (
 	TAGS        = "tags"
 	FILE        = "file"
 	SYNCHRONIZE = "synchronize"
+	GROUP       = "group"
 )
 
 type HandleTask interface {
@@ -71,7 +72,7 @@ func LoadTasks(name string) {
 					loop.UnmarshallLoopItems(v)
 				case TAGS:
 					fmt.Println("tags found")
-				case FILE, SYNCHRONIZE:
+				case FILE, SYNCHRONIZE, GROUP:
 					raw, err := yaml.Marshal(v)
 					if err != nil {
 						fmt.Println("err while Marshal")
@@ -106,7 +107,11 @@ func unMarshallTasks(task string, raw []byte) HandleTask {
 		sync := Synchronize{}
 		sync.Unmarshal(raw)
 		return &sync
-		//return Synchronize{}.Unmarshal(raw)
+	//return Synchronize{}.Unmarshal(raw)
+	case GROUP:
+		group := Group{}
+		group.Unmarshal(raw)
+		return &group
 	default:
 		fmt.Println("someone call the cops")
 	}

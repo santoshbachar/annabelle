@@ -1,0 +1,6 @@
+---
+
+- name: Create the gale-team group
+  group:
+    name: gale-team
+    state: present
