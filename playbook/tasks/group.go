@@ -53,9 +53,22 @@ func (g *Group) Execute(loop Loop) bool {
 }
 
 func present(name string) {
-	out, err := bash.Do("groupadd", name)
-	if err != nil {
-		panic(err)
+	fmt.Println("name is ", name)
+
+	if isAlreadyPresent(name) {
+		return
 	}
-	fmt.Println("bash output", out)
+
+	ok := bash.Do("groupadd", name)
+	if !ok {
+		panic("error creating group")
+	}
+}
+
+func isAlreadyPresent(name string) bool {
+	ok := bash.Do("grep", "-q", name, "/etc/group")
+	if ok {
+		return true
+	}
+	return false
 }

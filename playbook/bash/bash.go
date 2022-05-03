@@ -2,15 +2,16 @@ package bash
 
 import (
 	"os/exec"
-	"strings"
 )
 
-func Do(cmd string, args ...string) (string, error) {
+func Do(cmd string, args ...string) bool {
 	sh := exec.Command(cmd, args...)
-	outBytes, err := sh.CombinedOutput()
-	if err != nil {
-		return "", err
+	_, err := sh.Output()
+
+	if werr, ok := err.(*exec.ExitError); ok {
+		if s := werr.Error(); s != "0" {
+			return false
+		}
 	}
-	out := strings.TrimSpace(string(outBytes))
-	return out, err
+	return true
 }

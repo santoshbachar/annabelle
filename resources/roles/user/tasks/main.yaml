@@ -1,0 +1,7 @@
+---
+
+- name: Create the gale user
+  user:
+    name: gale-user
+    comment: Gale user for ansible
+    group: gale-team
