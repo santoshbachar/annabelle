@@ -1,15 +1,18 @@
 package tasks
 
 import (
-	"fmt"
+	"github.com/fatih/color"
 	"github.com/santoshbachar/annabelle/playbook/bash"
+	"github.com/santoshbachar/annabelle/playbook/constants"
 	"github.com/santoshbachar/annabelle/utility"
 	"gopkg.in/yaml.v2"
 )
 
 type Script struct {
 	//Name   string `yaml:"name"`
-	Script string `yaml:"script"`
+	Role   string
+	Script string //`yaml:"script"`
+	Path   string
 }
 
 //type Script string
@@ -21,25 +24,27 @@ func (s *Script) Unmarshal(file []byte) {
 	}
 }
 
-func (s *Script) init(name string) {
-	s.Script = name
+func (s *Script) init(roleName, fileName string) {
+	s.Role = roleName
+	s.Script = fileName
+	s.Path = constants.ResourceDir + "roles/" + s.Role + "/files/" + s.Script
+
 }
 
 func validateScript(s *Script) bool {
 	if s.Script == "" {
 		return false
 	}
-	path := "../files/" + s.Script
-	return utility.FileExists(path)
+	return utility.FileExists(s.Path)
 }
 
 func (s *Script) Execute(loop Loop) bool {
 	if !validateScript(s) {
-		fmt.Println("validation false, must be because of missing script in files directory")
+		color.Red("validation false, must be because of missing script in files directory")
 		return false
 	}
 
-	runScript(s.Script)
+	runScript(s.Path)
 
 	return true
 }

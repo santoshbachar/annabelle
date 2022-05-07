@@ -2,6 +2,7 @@ package tasks
 
 import (
 	"fmt"
+	"github.com/fatih/color"
 	"github.com/santoshbachar/annabelle/playbook/constants"
 	"gopkg.in/yaml.v2"
 	"os"
@@ -84,14 +85,15 @@ func LoadTasks(name string) {
 					handle = unMarshallTasks(k, raw)
 				//}()
 				case SCRIPT:
-					handle = unMarshallSpecialTasks(v.(string))
+					wg.Add(1)
+					handle = unMarshallSpecialTasks(name, v.(string))
 					fmt.Println("This is a script with value", v)
 				default:
 					fmt.Println("Are you lost sweetheart?")
 				}
 			}
 			fmt.Println("**********Attention************")
-			fmt.Println("One task is done")
+			color.Green("One task is done")
 			fmt.Println("**********Attention************")
 			//for i := 0
 			//i < len(loo))
@@ -127,8 +129,8 @@ func unMarshallTasks(task string, raw []byte) HandleTask {
 	return nil
 }
 
-func unMarshallSpecialTasks(name string) HandleTask {
+func unMarshallSpecialTasks(roleName, fileName string) HandleTask {
 	script := Script{}
-	script.init(name)
+	script.init(roleName, fileName)
 	return &script
 }
