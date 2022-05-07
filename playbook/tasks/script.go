@@ -28,7 +28,6 @@ func (s *Script) init(roleName, fileName string) {
 	s.Role = roleName
 	s.Script = fileName
 	s.Path = constants.ResourceDir + "roles/" + s.Role + "/files/" + s.Script
-
 }
 
 func validateScript(s *Script) bool {
