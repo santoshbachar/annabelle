@@ -18,6 +18,7 @@ const (
 	SYNCHRONIZE = "synchronize"
 	GROUP       = "group"
 	USER        = "user"
+	SCRIPT      = "script"
 )
 
 type HandleTask interface {
@@ -81,7 +82,10 @@ func LoadTasks(name string) {
 					wg.Add(1)
 					//go func() {
 					handle = unMarshallTasks(k, raw)
-					//}()
+				//}()
+				case SCRIPT:
+					handle = unMarshallSpecialTasks(v.(string))
+					fmt.Println("This is a script with value", v)
 				default:
 					fmt.Println("Are you lost sweetheart?")
 				}
@@ -121,4 +125,10 @@ func unMarshallTasks(task string, raw []byte) HandleTask {
 		fmt.Println("someone call the cops")
 	}
 	return nil
+}
+
+func unMarshallSpecialTasks(name string) HandleTask {
+	script := Script{}
+	script.init(name)
+	return &script
 }

@@ -18,4 +18,5 @@
     # Run these roles in this specific order, comment out if not needed. DO NOT! MESS WITH THE ORDER
 #    - common
 #    - group
-    - user
+#    - user
+    - script

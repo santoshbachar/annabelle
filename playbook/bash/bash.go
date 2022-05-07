@@ -4,6 +4,10 @@ import (
 	"os/exec"
 )
 
+func Run(path string) bool {
+	return true
+}
+
 func Do(cmd string, args ...string) bool {
 	sh := exec.Command(cmd, args...)
 	_, err := sh.Output()

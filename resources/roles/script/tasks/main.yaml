@@ -1,0 +1,7 @@
+---
+
+
+- name: Runs docker-pull-script
+  script: "images.sh"
+  tags:
+    - docker-pull-script

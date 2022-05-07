@@ -3,13 +3,14 @@ package roles
 import (
 	"fmt"
 	"github.com/santoshbachar/annabelle/playbook/constants"
-	"os"
+	"github.com/santoshbachar/annabelle/utility"
 )
 
 func LoadRoles(roles []string) []string {
 	var okRoles []string
 	for _, role := range roles {
-		ok := mainFileExists(role)
+		path := getTaskMainYamlPath(role)
+		ok := utility.FileExists(path)
 		if ok != true {
 			fmt.Println("no playbook for " + role)
 		} else {
@@ -20,10 +21,7 @@ func LoadRoles(roles []string) []string {
 	return okRoles
 }
 
-func mainFileExists(name string) bool {
+func getTaskMainYamlPath(name string) string {
 	var path = constants.ResourceDir + "roles/" + name + "/tasks/main.yaml"
-	if _, err := os.Stat(path); err != nil {
-		return false
-	}
-	return true
+	return path
 }
