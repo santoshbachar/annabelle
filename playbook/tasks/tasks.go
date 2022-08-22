@@ -12,14 +12,15 @@ import (
 //type TaskType string
 
 const (
-	NAME        = "name"
-	LOOP        = "loop"
-	TAGS        = "tags"
-	FILE        = "file"
-	SYNCHRONIZE = "synchronize"
-	GROUP       = "group"
-	USER        = "user"
-	SCRIPT      = "script"
+	NAME         = "name"
+	LOOP         = "loop"
+	TAGS         = "tags"
+	FILE         = "file"
+	SYNCHRONIZE  = "synchronize"
+	GROUP        = "group"
+	USER         = "user"
+	SCRIPT       = "script"
+	DOCKER_IMAGE = "docker_image"
 )
 
 type HandleTask interface {
@@ -75,7 +76,7 @@ func LoadTasks(name string) {
 					loop.UnmarshallLoopItems(v)
 				case TAGS:
 					fmt.Println("tags found")
-				case FILE, SYNCHRONIZE, GROUP, USER:
+				case FILE, SYNCHRONIZE, GROUP, USER, DOCKER_IMAGE:
 					raw, err := yaml.Marshal(v)
 					if err != nil {
 						fmt.Println("err while Marshal")
@@ -123,6 +124,10 @@ func unMarshallTasks(task string, raw []byte) HandleTask {
 		user := User{}
 		user.Unmarshal(raw)
 		return &user
+	case DOCKER_IMAGE:
+		di := DockerImage{}
+		di.Unmarshal(raw)
+		return &di
 	default:
 		fmt.Println("someone call the cops")
 	}
